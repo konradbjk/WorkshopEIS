@@ -7,7 +7,7 @@ MongoClient.connect("mongodb://192.168.84.17:27017/workshopdb", function(err, db
   if(!err) {
     console.log("Connected to MongoDB");
   }
-  var collection = db.collection('zapis1');
+  var collection = db.collection('zapis2');
 
   var client = mqtt.connect("tls://testrtls.kontakt.io:8083", {connectTimeout: 5000, username: "Konrad", password: "rRTrNccBDyZAmJclNOLmFJvmTRTYdZMH"});
 
@@ -31,6 +31,7 @@ client.on('message', function (topic, message) {
 	var device = jsonata("$[trackingId=\"mabs\"]").evaluate(JSON.parse(message.toString()));
 	if (device != undefined) {
     //console.log()
+    device['real_timestamp'] = Math.floor(Date.now() / 1000);
     collection.insert(device, {w:1}, function(err, result) {
       if (result != undefined) {
         console.log("Timestamp: " + device["timestamp"] + " SourceId: " + device["sourceId"] + " RSSI: " + device["rssi"]);
