@@ -4,6 +4,8 @@
 This repository consinst of those files:
 * **data.js** this file is connecting to the Kontakt.io API and fetching the data about RSSI and writing it to MongoDB
 * **script.py** this scrip is basic example presenting how to connect to the MongoDB and print first 5 element of the collection in DB
+* **obejscie_biura.ipynb** this file has the the recorded the path around the office
+* **notebook1.ipynb** this notebook is used to get to know the data and play around it
 
 ## Location Engine
 Location Engine is software & hardware product offered by Kontakt.io. As a hardware you need to have at least 4 [Gateways](https://store.kontakt.io/next-generation/33-gateway.html) and one beacon. During the test I used [Card Beacon](https://store.kontakt.io/next-generation/31-card-beacon.html). In brief Gateways are devices that are mounted inside the venues to monitor the surrouning area for beacons. But what are beacons? Beacons are small sensors that broadcast **Bluetooth Low Energy** (BLE) packets. Those packets are called an advertising packets becouse the idea is that beacon is just broadacting. The way it works is analogous to the sea beacons that are lighting all around itselves. Gateways then send the data about seen beacon and the RSSI that it had to the cloud from where we fetch it using **data.js** script.
@@ -39,9 +41,13 @@ pip install package_name
 
 In the next step download this repository as a zip file or clone it
 ~~~ bash
-git clone XXX
-cd XXX
+git clone https://github.com/konradbjk/WorkshopEIS.git
+cd WorkshopEIS
 ~~~
+
+Open the **data.js** file and change the data inside it to your needs. To run this project I have set MongoDB server on my RaspberryPi. Each of the runs should be saved to the different data collection.
+
+You can test connection to the MongoDB using **script.py**. 
 
 ## Contribution
 * [**Konrad Bujak**](https://www.linkedin.com/in/konrad-bujak-024445122/) is the author and the owner of this project
