@@ -51,17 +51,22 @@ Most of the algorithms are explained in the jupyter notebooks
 ### SLAM
 **SLAM** stands for **Simultaneous Localization and Mapping**. SLAM is the computational problem of constructing or updating a map of an unknown environment while simultaneously keeping track of an agent's location within it. Popular approximate methods solving this problems include **particle filter** (aka **Sequential Monte Carlo** SMC), **Bundle adjustment** and **extended Kalman filter**. SLAM algorithms are tailored to avaiable resources, not aimed at perfection but operational compliance.
 
-Given a series of sensor observations ![alt_text](http://bit.ly/2w0j3yR) over discrete time steps *t* , the SLAM problem is to compute an estimate of the agent's location
-![alt_text](http://www.sciweavers.org/tex2img.php?eq=%20x_%7Bt%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
- and a map of the environment ![alt_text](http://bit.ly/2yeGypu). All quantities are usually probabilistic, so the objective is to compute:
+Given a series of sensor observations ![o_{t}](http://bit.ly/2w0j3yR)
+over discrete time steps *t* , the SLAM problem is to compute an estimate of the agent's location
+![x_{t}](http://www.sciweavers.org/tex2img.php?eq=%20x_%7Bt%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+ and a map of the environment ![m_{t}](http://bit.ly/2yeGypu). All quantities are usually probabilistic, so the objective is to compute:
 
-![alt_text](https://wikimedia.org/api/rest_v1/media/math/render/svg/55e70fdde5a9cba64f55bdc9c1a9df0fa014799a)
+![Slam equation](https://wikimedia.org/api/rest_v1/media/math/render/svg/55e70fdde5a9cba64f55bdc9c1a9df0fa014799a)
+
+
 
 ### Why A-star?
 A star algorithm is used very often as path finding one. It has many pros
 
 ### Calculate distance from RSSI
-Becouse BLE beacons only broadcast their ID, the *Received Signal Strength Indication* (RSSI) is used in order to extract position information out of the beacon signal. The RSSI value can then be converted into a distance measurement.
+Becouse BLE beacons only broadcast their ID, the *Received Signal Strength Indication* (RSSI) is used in order to extract position information out of the beacon signal. The RSSI value can then be converted into a distance measurement. The **[rssi_to_dist_dependency](https://github.com/konradbjk/WorkshopEIS/blob/master/rss_to_dist_dependency.ipynb)** contain the print this graph:
+
+![Rssi to distance dependency](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/rssi_dist.png?raw=true)
 
 We have to create temporary variable which is *ratio* to help us calculate the distance based on RSSI and TxPower.
 ~~~ java
