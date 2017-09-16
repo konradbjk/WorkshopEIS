@@ -41,8 +41,11 @@ cd ~/WorkshopEIS
 
 jupyter notebook
 ~~~
+
+***
 ## Location Engine
 Location Engine is software & hardware product offered by Kontakt.io. As a hardware you need to have at least 4 [Gateways](https://store.kontakt.io/next-generation/33-gateway.html) and one beacon. During the test I used [Card Beacon](https://store.kontakt.io/next-generation/31-card-beacon.html). In brief Gateways are devices that are mounted inside the venues to monitor the surrouning area for beacons. But what are beacons? Beacons are small sensors that broadcast **Bluetooth Low Energy** (BLE) packets. Those packets are called an advertising packets becouse the idea is that beacon is just broadacting. The way it works is analogous to the sea beacons that are lighting all around itselves. Gateways then send the data about seen beacon and the RSSI that it had to the cloud from where we fetch it using **data.js** script.
+***
 
 ## Algorithms
 
@@ -58,7 +61,17 @@ over discrete time steps *t* , the SLAM problem is to compute an estimate of the
 
 ![Slam equation](https://wikimedia.org/api/rest_v1/media/math/render/svg/55e70fdde5a9cba64f55bdc9c1a9df0fa014799a)
 
+Implementing SLAM will let us convert RSSI maps like this below
 
+![Map RSSI values](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/map_rssi.png?raw=true)
+
+into accurate radio maps
+
+![accurate radio map](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/accurate_map.png?raw=true)
+
+Sometimes those accurate maps we call fingerprints. Creating fingerprints from scratch is time consuming while the accuracy is similar.
+
+![SLAM vs fingerprints](http://indoo.rs/wp-content/uploads/2016/01/indoo.rs_SLAM_Engine-1.png)
 
 ### Why A-star?
 A star algorithm is used very often as path finding one. It has many pros
@@ -68,6 +81,19 @@ Becouse BLE beacons only broadcast their ID, the *Received Signal Strength Indic
 
 ![Rssi to distance dependency](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/rssi_dist.png?raw=true)
 
+As we see this relation is not linear. What is more each of the RSSI values is very noisy. We should assume about 10% threshold. Next thing, that RSSI gives us Line of Sight distance value but it happens that we actually recived reflected signal.
+![LoS_NLoS.png](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/LoS_NLoS.png?raw=true)
+
+To achieve better accuracy it is also recommended to make use of the height difference between Gateway and the beacon. We can assume height of the beacon to 1.5m as the cards should be on a leash.
+
+![beacon_heaight](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/height_LOS.png?raw=true)
+
+Each of the beacons broadcast in a sphere ![spheare_equation.png](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/spheare_equation.png?raw=true) Knowing the beacon height whe can create from this sphere a circle, where the center is at (xm,ym,zb) and the resulting radius rc is:
+![radiusC.png](https://github.com/konradbjk/WorkshopEIS/blob/master/Graphics/radiusC.png?raw=true)
+
+Next problem that is to solve is instability of the signal. To solve this we can for example implement **Finite Impulse Response** (FIR) alike in [this paper](http://ieeexplore.ieee.org/document/7818366/). 
+
+#### Code
 We have to create temporary variable which is *ratio* to help us calculate the distance based on RSSI and TxPower.
 ~~~ java
 if rssi == 0
@@ -80,7 +106,7 @@ else
 ~~~
 Where dist is the distance that we want to calculate, TxPower power of the signal broadcasted by the beacon (decimal value and constant). For Card Beacons, this value is by default equal to 6. Received signal strength indication (RSSI) is the value that we fetched from the Kontakt.io API.
 
-
+***
 ## Contribution
 * [**Konrad Bujak**](https://www.linkedin.com/in/konrad-bujak-024445122/) is the author and the owner of this project
 * **Kontakt.io** (Kontakt Micro-Location Sp. z o. o.) provided the hardware to run this project
